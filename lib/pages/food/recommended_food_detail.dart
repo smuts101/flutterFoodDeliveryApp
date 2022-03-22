@@ -1,27 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/data/recommended_product_controller.dart';
+import 'package:food_delivery_app/routes/route_helper.dart';
+import 'package:food_delivery_app/utils/app_constants.dart';
 import 'package:food_delivery_app/utils/colors.dart';
 import 'package:food_delivery_app/utils/dimensions.dart';
 import 'package:food_delivery_app/widgets/app_icon.dart';
 import 'package:food_delivery_app/widgets/big_text.dart';
 import 'package:food_delivery_app/widgets/extendable_text_widget.dart';
+import 'package:get/get.dart';
 
 class RecommendedFoodDetail extends StatelessWidget {
-  const RecommendedFoodDetail({Key? key}) : super(key: key);
+  final int pageId;
+  const RecommendedFoodDetail({Key? key,required this.pageId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var product = Get.find<RecommendedProductController>().recommendedProductList[pageId];
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
+
           //Display background Img
           SliverAppBar(
+            automaticallyImplyLeading:false,
             toolbarHeight: 70,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(icon: Icons.clear),
+                GestureDetector(
+                    onTap:(){
+                      Get.toNamed(RouteHelper.getInitial());
+                    },
+                    child: AppIcon(icon: Icons.clear)),
                 AppIcon(icon: Icons.shopping_cart_outlined)
               ],
             ),
@@ -29,7 +42,7 @@ class RecommendedFoodDetail extends StatelessWidget {
               preferredSize:  Size.fromHeight(20),
               child: Container(
                 //color: Colors.white,
-                  child: Center(child: BigText(size: Dimensions.font26,text: "Chinese Side",)),
+                  child: Center(child: BigText(size: Dimensions.font26,text: product.name!,)),
                 width: double.maxFinite,
                   padding: EdgeInsets.only(top: 5,bottom: 10),
                 decoration: BoxDecoration(
@@ -47,8 +60,8 @@ class RecommendedFoodDetail extends StatelessWidget {
             backgroundColor: AppColors.yellowColor,
             expandedHeight: 300,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.asset(
-                "images/refreshments-4022016_640.jpg",
+              background: Image.network(
+                AppConstants.BASE_URL+AppConstants.UPLOAD_URL+product.img!,
                 width: double.maxFinite,
                 fit: BoxFit.cover,
               ),
@@ -61,32 +74,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                 children: [
                   Container(
                     child:
-                    ExpandableTextWidget (text:
-                        "Expandable Expandable widget Expandable widget Expandable widget Expandable "
-                            "widget Expandable widget Expandable widget widget Expandable widget"
-                            " Expandable widget widget Expandable widget Expandable widget widget"
-                            " Expandable widget Expandable widget widget Expandable widget Expandable"
-                            " widget widget Expandable widget Expandable widget widget Expandable widget"
-                            " Expandable widget widget Expandable widget Expandable widget widget Expandable"
-                            " widget Expandable widget widget Expandable widget Expandable widget widget Expandable"
-                            " widget Expandable widget widget Expandable widget Expandable widget widget "
-                            "Expandable widget Expandable widget widget Expandable widget Expandable widget "
-                            "widget Expandable widget Expandable widget widget Expandable widget Expandable "
-                            "widget widget Expandable widget Expandable widget widget Expandable widget Expandable"
-                            " widget widget Expandable widget Expandable widget widget Expandable widget Expandable"
-                            " widget widget Expandable widget Expandable widget widget Expandable widget Expandable"
-                            " widget widget Expandable widget Expandable widget widget Expandable widget Expandable"
-                            " widget widget Expandable widget Expandable widget widget Expandable widget Expandable"
-                            " widget widget Expandable widget Expandable widget widget Expandable widget Expandable "
-                            "widget widget Expandable widget Expandable widget widget Expandable widget Expandable "
-                            "widget widget Expandable widget Expandable widget widget Expandable widget Expandable "
-                            "widget widget Expandable widget Expandable widget widget Expandable widget Expandable "
-                            "widget widget Expandable widget Expandable widget widget Expandable widget Expandable "
-                            "widget widget Expandable widget Expandable widget widget Expandable widget Expandable"
-                            " widget widget Expandable widget Expandable widget widget Expandable widget Expandable"
-                            " widget  widget Expandable widget Expandable widget  widget section start here, Expandable "
-                            "widget section start here,Expandable widget section start here,Expandable widget section start here"
-                    ),
+                    ExpandableTextWidget (text:product.description!),
                     margin: EdgeInsets.only(left: Dimensions.width20,right: Dimensions.width20,),
                   )
                 ],
@@ -112,7 +100,7 @@ class RecommendedFoodDetail extends StatelessWidget {
               AppIcon(
                   iconSize: Dimensions.iconSize24,
                   iconColor:Colors.white, backgroundColor: AppColors.mainColor,icon: Icons.remove),
-              BigText(text: "\$12.88 "+" X "+" 0 ",
+              BigText(text: "\$ ${product.price! } X  0 ",
                 color: AppColors.mainBlackColor,size: Dimensions.font26,),
               AppIcon(
                   iconSize: Dimensions.iconSize24,
