@@ -90,10 +90,12 @@ class PopularProductController extends GetxController{
       _cart.items.forEach((key, value) {
         print("the id is"+value.id.toString()+" The quantity is "+value.quantity.toString() );
       });
-
+  update();
   }
 
-
+  int get totalItems{
+    return _cart.totalItems;
+  }
 
 
 }

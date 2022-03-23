@@ -28,6 +28,10 @@ class CartController extends GetxController{
            time:DateTime.now().toString(),
          );
        });
+
+       if(totalQuantity<=0){
+         _items.remove(product.id);
+       }
     }else{
 
       if(quantity>0){
@@ -58,7 +62,6 @@ class CartController extends GetxController{
     }
 
     }
-
   bool existInCart(ProductModel product){
     if(_items.containsKey(product.id)){
       return true;
@@ -76,6 +79,13 @@ class CartController extends GetxController{
       });
     }
     return quantity;
+  }
+  int get totalItems{
+    var totalQuantity=0;
+    _items.forEach((key, value) {
+     totalQuantity += value.quantity!;
+    });
+    return totalQuantity;
   }
 
   }
